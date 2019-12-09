@@ -2,6 +2,8 @@ from alphaorm.drivers.DriverInterface import DriverInterface
 from .AlphaRecord import AlphaRecord
 from .utilities.constants import *
 from .utilities.functions import *
+import warnings
+warnings.filterwarnings("ignore")
 
 class AlphaORM():
 	DATA_TYPES = [ 'float', 'str' , 'bool' , 'int'];
@@ -22,6 +24,8 @@ class AlphaORM():
 
 	@staticmethod
 	def store(alpha_record):
+		if len(getProperties(alpha_record)) == 0:
+			return
 		try:
 			if ((type(alpha_record) == AlphaRecord) == False):
 				raise RuntimeError(DATA_TYPE_ERROR('store'))

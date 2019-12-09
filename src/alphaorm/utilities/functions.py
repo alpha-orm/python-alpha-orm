@@ -14,3 +14,16 @@ def getProperties(theObject):
 
 def get_type(variable):
 	return type(variable).__name__
+
+def getTableMap(tablename):
+	from ..drivers.DriverInterface import DriverInterface
+	from ..AlphaORM import AlphaORM	
+	g = []
+	for element in DriverInterface.getDriver(AlphaORM.DRIVER).getColumns(tablename):
+		g.append({ element['Field'] : element['Type'] })
+	j = []
+	for pair in g:
+		for key, val in pair.items():
+			pass
+			j.append({ key : val })
+	return j

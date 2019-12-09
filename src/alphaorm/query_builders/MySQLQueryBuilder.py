@@ -62,25 +62,28 @@ class MySQLQueryBuilder(implements(QueryBuilderInterface)):
 
 	@staticmethod
 	def updateRecord(tablename, dict_map, id):
-		sql = f"UPDATE `{tablename}` SET"
+		sql = f"UPDATE `{tablename}` SET "
 		columns = getProperties(dict_map)
 		for column in columns:
 			if column in [ '_id', 'id', '_tablename' ]:
 				continue
 			colVal = getattr(dict_map, column)
-			colVal = 1 if colVal is True else 0 if isinstance(colVal, str) else colVal
+			if isinstance(colVal, AlphaRecord) :
+				continue	
+			colVal = 1 if colVal is True else 0 if isinstance(colVal, bool) else colVal
 			colVal = json.dumps(colVal)
 			if column in  [ '_id', '_tablename', 'id' ]:
 				continue
 			sql += f"`{column}` = {colVal}"
 			sql += f" WHERE `id` = {id}" if column == columns[-1] else ', ' 
+		if sql.endswith(', '):
+			sql = sql[:-2] + f" WHERE `id` = {id}"
 		return sql
 
 	@staticmethod
 	def insertRecord(tablename, dict_map):
 		sql = f"INSERT INTO `{tablename}` ("
 		columns = getProperties(dict_map)
-		print(columns,'wdfjkkkjjkjkjk')
 		for column in columns :
 			if column in  [ '_tablename', '_id' ]:
 				continue
@@ -95,7 +98,6 @@ class MySQLQueryBuilder(implements(QueryBuilderInterface)):
 				colVal = dict_map.getID()
 			else:
 				colVal = getattr(dict_map, column)
-				print(json.dumps(colVal),'dfuijjjjjjjjjjjj')
 				if column != 'id' and isinstance(getattr(dict_map, column), AlphaRecord):
 					colVal = getattr(dict_map, column).getID()
 			colVal = 1 if colVal is True else 0 if isinstance(colVal, bool) else colVal
@@ -114,7 +116,6 @@ class MySQLQueryBuilder(implements(QueryBuilderInterface)):
 
 	@staticmethod
 	def createColumns(tablename, dict_map):
-		print(dict_map,'fffffffffffffffhhhhhhhhhhh')
 		sql = f"ALTER TABLE `{tablename}` "
 		columns = list(dict_map.keys())
 		for column in columns:

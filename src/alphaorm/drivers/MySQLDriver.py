@@ -23,13 +23,15 @@ class MySQLDriver(implements(DriverInterface)):
 		MySQLDriver.connect(AlphaORM.OPTIONS)		
 		MySQLDriver.db.execute(sql)
 		MySQLDriver.con.commit()
+		lastInsert = 0
 		print(sql)
 		if return_val:
 			retval = MySQLDriver.db.fetchall()
+			lastInsert = MySQLDriver.db.lastrowid
 		else:
 			retval = None
 		MySQLDriver.db.close()
-		return retval
+		return retval, lastInsert
 
 	@staticmethod
 	def createTable(tablename):
@@ -37,25 +39,25 @@ class MySQLDriver(implements(DriverInterface)):
 
 	@staticmethod
 	def getAll(tablename):
-		rows = MySQLDriver.query(MySQLQueryBuilder.getAllRecords(tablename))
+		rows,_ = MySQLDriver.query(MySQLQueryBuilder.getAllRecords(tablename),True)
 		return AlphaRecord.create(tablename, rows)
 
 	@staticmethod
 	def insertRecord(tablename, alpha_record):
-		return MySQLDriver.query(MySQLQueryBuilder.insertRecord(tablename, alpha_record))
-
+		return MySQLDriver.query(MySQLQueryBuilder.insertRecord(tablename, alpha_record), True)
+		
 	@staticmethod
 	def updateRecord(alpha_record):
 		for col in getProperties(alpha_record):
 			if isinstance(getattr(alpha_record, col), AlphaRecord):
 				setattr(alpha_record, col, MySQLDriver.updateRecord(getattr(alpha_record, col)))
-				delattr(alpha_record, col)
-		update = MySQLDriver.query(MySQLQueryBuilder.updateRecord(tablename, alpha_record, alpha_record.getID()))
+		update = MySQLDriver.query(MySQLQueryBuilder.updateRecord(alpha_record.getTableName(), alpha_record, alpha_record.getID()))
 		return alpha_record
 
 	@staticmethod
 	def getColumns(tablename):
-		return MySQLDriver.query(MySQLQueryBuilder.getColumns(tablename), True)
+		retval, _ = MySQLDriver.query(MySQLQueryBuilder.getColumns(tablename), True)
+		return retval
 
 	@staticmethod
 	def updateColumns(tablename, updated_columns):
@@ -63,19 +65,18 @@ class MySQLDriver(implements(DriverInterface)):
 
 	@staticmethod
 	def createColumns(tablename, new_columns):
-		print(MySQLQueryBuilder.createColumns(tablename, new_columns),'kkkkkkkkkkkkkkkkkkkkkk')
 		MySQLDriver.query(MySQLQueryBuilder.createColumns(tablename, new_columns))
 
 	@staticmethod
 	def find(tablename, where, dict_map):
-		row = MySQLDriver.query(MySQLQueryBuilder.find(True, tablename, where, dict_map))
+		row,_ = MySQLDriver.query(MySQLQueryBuilder.find(True, tablename, where, dict_map), True)
 		if len(row) == 0:
 			raise RuntimeError('No record found for corresponding query')
 		return AlphaRecord.create(tablename, row, True)
 
 	@staticmethod
 	def findAll(tablename, where, dict_map):
-		rows = MySQLDriver.query(MySQLQueryBuilder.find(False, tablename, where, dict_map))
+		rows,_ = MySQLDriver.query(MySQLQueryBuilder.find(False, tablename, where, dict_map), True)
 		return AlphaRecord.create(tablename, rows)
 
 	@staticmethod
@@ -83,10 +84,11 @@ class MySQLDriver(implements(DriverInterface)):
 		try:
 			for a in getProperties(alpha_record):
 				if isinstance(getattr(alpha_record,a), AlphaRecord):
-					setattr(alpha_record,a, MySQLDriver.store(alpha_record[a], False))
-
+					setattr(alpha_record,getattr(alpha_record,a).getTableName(), MySQLDriver.store(getattr(alpha_record,a), False))
+					if getattr(alpha_record,a).getTableName() != a:
+						delattr(alpha_record,a)
+		
 			columns_db = MySQLDriver.getColumns(alpha_record.getTableName())
-
 			updated_columns, new_columns = MySQLGenerator.columns(columns_db, alpha_record)
 			if updated_columns:
 				MySQLDriver.updateColumns(alpha_record.getTableName(), updated_columns)
@@ -97,9 +99,12 @@ class MySQLDriver(implements(DriverInterface)):
 			if alpha_record.getID() != None:
 				for col in getProperties(alpha_record):
 					if isinstance(getattr(alpha_record,col), AlphaRecord):
-						setattr(alpha_record,col ,MySQLDriver.store(alpha_record[col]))
-				return MySQLDriver.updateRecord(alpha_record)
-			alpha_record.setID(MySQLDriver.insertRecord(alpha_record.getTableName(), alpha_record))
+						setattr(alpha_record,a ,MySQLDriver.store(getattr(alpha_record,col)))
+						return MySQLDriver.updateRecord(alpha_record)
+					return MySQLDriver.updateRecord(alpha_record)
+			
+			retval, last = MySQLDriver.insertRecord(alpha_record.getTableName(), alpha_record)
+			alpha_record.setID(last)
 			return alpha_record
 		except Exception as e:
 			raise e
@@ -117,7 +122,7 @@ class MySQLDriver(implements(DriverInterface)):
 
 	@staticmethod
 	def dropAll(tablename):
-		return MySQLDriver.query(MySQLQueryBuilder.dropAll(tablename))
+		return MySQLDriver.query(MySQLQueryBuilder.deleteAllRecords(tablename))
 
 	@staticmethod
 	def getDriver(driver):

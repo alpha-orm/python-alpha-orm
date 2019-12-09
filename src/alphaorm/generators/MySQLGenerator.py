@@ -3,14 +3,14 @@ from ..utilities.functions import *
 from ..query_builders.MySQLQueryBuilder import MySQLQueryBuilder
 from ..AlphaRecord import AlphaRecord
 from ..AlphaORM import AlphaORM
-
-class MySQLGenerator ():
+from .GeneratorInterface import GeneratorInterface
+from interface import implements
+class MySQLGenerator (implements(GeneratorInterface)):
 
     @staticmethod
     def checkColumnUpdates(columns_db, columns_record, alpha_record):
         updated_columns = {}
         existing = []
-        print(columns_db)
         for col in columns_db:
             if col['Field'] in columns_record:
                 existing.append(col['Field'])
