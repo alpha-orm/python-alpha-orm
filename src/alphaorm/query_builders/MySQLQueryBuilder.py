@@ -42,7 +42,7 @@ class MySQLQueryBuilder(implements(QueryBuilderInterface)):
 			sql += where
 			sql +=  ' LIMIT 1' if single else ''
 			return sql
-        
+
 		if len(matches) != len(columns):
 			raise RuntimeError(UNEQUAL_BOUNDED_PARAMETER)
 
@@ -52,7 +52,7 @@ class MySQLQueryBuilder(implements(QueryBuilderInterface)):
 				raise RuntimeError(VARIABLE_NOT_PRESENT(i))
 			val = dict_map[i]
 			val = val.replace("'","\'") if isinstance(val, str) else val
-			val = 1 if val is True else 0 if isinstance(val, str) else val
+			val = 1 if val is True else 0 if isinstance(val, bool) else val
 			val = json.dumps(val)
 			where = where.replace(match, val)
 
