@@ -1,5 +1,13 @@
 from alphaorm.AlphaORM import AlphaORM as DB
 
+'''
+Implemented for:
+-mysql [completed]
+-sqlite [undone]
+-postgres [undone]
+-sqlserver [undone]
+'''
+
 DB.setup('mysql', {
 	'host' : 'localhost',
 	'user' : 'root',
@@ -37,36 +45,40 @@ DB.setup('mysql', {
 #--------------------------------------
 # books = DB.getAll('book')
 # for book in books:
-# 	print(book)
+	# print(f'{book.title} by {book.author.name}')
 
 
 
 
 #--------------------------------------
-#	READ 1 [filter one]
+#	READ 2 [filter one]
 #--------------------------------------
 # book = DB.find('book','id = :bid', { 'bid' : 1 })
-# print(book)
+# print(f'{book.title} by {book.author.name}')
 
 
 
 
 #--------------------------------------
-#	READ 1 [filter all]
+#	READ 3 [filter all]
 #--------------------------------------
-# books = DB.findAll('book','author_id = :aid', { 'aid' : 1 })
-# for book in books:
+# author = DB.find('author','name = :author_name',{ 'author_name': 'William Shakespare' })
+# booksByShakespare = DB.findAll('book', 'author_id : a_id', { 'a_id': author.getID() })
+# print('Books by William Shakespare are :')
+# for book in booksByShakespare:
 # 	print(book.title)
-
 
 
 
 #--------------------------------------
 #	UPDATE
 #--------------------------------------
+# product = DB.find('shop_product', 'id = :pid', { pid: 1 })
+# product.price = 500
+
 # book = DB.find('book','id = :bid', { 'bid' : 1 })
 # book.author.name = 'New author'
-# book.author.hee = 'haha'
+# book.author.isbn = '3847302-SD'
 # book.title = 'New Title'
 # DB.store(book)
 # print(book)
