@@ -20,11 +20,10 @@ class MySQLDriver(implements(DriverInterface)):
 
 	@staticmethod
 	def query(sql,return_val=False):
-		MySQLDriver.connect(AlphaORM.OPTIONS)		
+		MySQLDriver.connect(AlphaORM.OPTIONS)
 		MySQLDriver.db.execute(sql)
 		MySQLDriver.con.commit()
 		lastInsert = 0
-		print(sql)
 		if return_val:
 			retval = MySQLDriver.db.fetchall()
 			lastInsert = MySQLDriver.db.lastrowid
@@ -99,8 +98,7 @@ class MySQLDriver(implements(DriverInterface)):
 			if alpha_record.getID() != None:
 				for col in getProperties(alpha_record):
 					if isinstance(getattr(alpha_record,col), AlphaRecord):
-						setattr(alpha_record,a ,MySQLDriver.store(getattr(alpha_record,col)))
-						return MySQLDriver.updateRecord(alpha_record)
+						setattr(alpha_record,col ,MySQLDriver.store(getattr(alpha_record,col)))
 					return MySQLDriver.updateRecord(alpha_record)
 			
 			retval, last = MySQLDriver.insertRecord(alpha_record.getTableName(), alpha_record)
