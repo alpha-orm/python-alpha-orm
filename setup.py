@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="alpha-orm",
-    version="0.0.120",
+    version="1.0.0",
     author="Claret Nnamocha",
     license='MIT',
     author_email="devclareo@gmail.com",
@@ -28,7 +28,6 @@ setuptools.setup(
     ],
     classifiers=[
         "Operating System :: OS Independent",
-        'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 3',
