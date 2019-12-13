@@ -1,4 +1,4 @@
-from alphaorm.drivers.DriverInterface import DriverInterface
+from .drivers.DriverInterface import DriverInterface
 from .AlphaRecord import AlphaRecord
 from .utilities.constants import *
 from .utilities.functions import *
