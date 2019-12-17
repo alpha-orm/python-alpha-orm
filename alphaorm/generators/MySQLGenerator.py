@@ -51,3 +51,8 @@ class MySQLGenerator (implements(GeneratorInterface)):
         diff_array = array_diff(columns_record, existing)
         new_columns = MySQLGenerator.creatNewColumns(diff_array, alpha_record, alpha_record.getTableName())
         return updated_columns, new_columns
+
+
+    @staticmethod
+    def getGenerator(driver):
+        pass

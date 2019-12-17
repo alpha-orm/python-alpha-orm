@@ -59,10 +59,10 @@ def read():
 #	READ 2 [filter one]
 #--------------------------------------
 def read_2():
-	book = DB.find('book','id = :bid and age > 5', { 'bid' : 1 })
+	book = DB.find('book','id = :bid', { 'bid' : 1 })
 	print(f'{book.title} by {book.author.name}')
 
-
+	
 
 #--------------------------------------
 #	READ 3 [filter all]

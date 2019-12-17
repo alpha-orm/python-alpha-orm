@@ -12,3 +12,9 @@ class GeneratorInterface (interface.Interface):
     @staticmethod
     def columns(columns_db, alpha_record, base = True):
         pass
+
+    @staticmethod
+    def getGenerator(driver):
+        if driver == 'mysql':
+            from .MySQLGenerator import MySQLGenerator
+            return MySQLGenerator
