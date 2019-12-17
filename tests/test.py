@@ -61,7 +61,6 @@ def read():
 def read_2():
 	book = DB.find('book','id = :bid and age > 5', { 'bid' : 1 })
 	print(f'{book.title} by {book.author.name}')
-read_2()
 
 
 
