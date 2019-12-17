@@ -1,5 +1,5 @@
-UNDERSCORE_NOT_SUPORRTED_ERROR = 'Column names cannot contain `_` symbol'
-SPACE_NOT_SUPORRTED_ERROR = 'Column names should not have a space'
+UNDERSCORE_NOT_SUPPORTED_ERROR = 'Column names cannot contain `_` symbol'
+SPACE_NOT_SUPPORTED_ERROR = 'Column names should not have a space'
 RECORD_NOT_FOUND = "Record matching query not found"
 SETUP_ERROR = 'Connection to database has not been set yet!'
 UNEQUAL_BOUNDED_PARAMETER = 'Number of bounded parameters is not equal to variables'

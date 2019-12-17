@@ -35,10 +35,10 @@ class AlphaORM():
 			    	continue
 			    
 			    if '_' in col :
-			    	raise RuntimeError(UNDERSCORE_NOT_SUPORTED_ERROR)
+			    	raise RuntimeError(UNDERSCORE_NOT_SUPPORTED_ERROR)
 			    
 			    if ' ' in col:
-			    	raise RuntimeError(SPACE_NOT_SUPORRTED_ERROR)
+			    	raise RuntimeError(SPACE_NOT_SUPPORTED_ERROR)
 
 			alpha_record = DriverInterface.getDriver(AlphaORM.DRIVER).store(alpha_record)
 		except Exception as e:
