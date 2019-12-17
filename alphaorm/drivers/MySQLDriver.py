@@ -7,6 +7,8 @@ from ..utilities.functions import *
 from ..AlphaRecord import AlphaRecord
 from ..AlphaORM import AlphaORM
 from ..generators.MySQLGenerator import MySQLGenerator
+import re
+from ..utilities.constants import *
 
 
 class MySQLDriver(implements(DriverInterface)):
@@ -75,32 +77,32 @@ class MySQLDriver(implements(DriverInterface)):
             MySQLQueryBuilder.createColumns(tablename, new_columns))
 
     @staticmethod
-    def find(tablename, where, dict_map):
+    def createColumnsForFind(tablename, where):
+        alpha_record = AlphaORM.create(tablename)
+        columns = re.findall(r'(\w+\s*)(=|!=|>|<|>=|<=)', where)
+        for column in columns:
+            setattr(alpha_record, column[0].strip(), False)
+
         columns_db = MySQLDriver.getColumns(tablename)
-        updated_columns, new_columns = MySQLGenerator.columns(
-            columns_db, dict_map)
-        if updated_columns:
-            MySQLDriver.updateColumns(tablename, updated_columns)
+        _, new_columns = MySQLGenerator.columns(
+            columns_db, alpha_record)
+
         if new_columns:
             MySQLDriver.createColumns(tablename, new_columns)
+
+    @staticmethod
+    def find(tablename, where, dict_map):
+        MySQLDriver.createColumnsForFind(tablename, where)
 
         row, _ = MySQLDriver.query(MySQLQueryBuilder.find(
             True, tablename, where, dict_map), True)
         if len(row) == 0:
-            raise RuntimeError('No record found for corresponding query')
+            raise RuntimeError(RECORD_NOT_FOUND)
         return AlphaRecord.create(tablename, row, True)
 
     @staticmethod
     def findAll(tablename, where, dict_map):
-        columns_db = MySQLDriver.getColumns(tablename)
-        updated_columns, new_columns = MySQLGenerator.columns(
-            columns_db, dict_map)
-        if updated_columns:
-            MySQLDriver.updateColumns(
-                tablename, updated_columns)
-        if new_columns:
-            MySQLDriver.createColumns(
-                tablename, new_columns)
+        MySQLDriver.createColumnsForFind(tablename, where)
 
         rows, _ = MySQLDriver.query(MySQLQueryBuilder.find(
             False, tablename, where, dict_map), True)

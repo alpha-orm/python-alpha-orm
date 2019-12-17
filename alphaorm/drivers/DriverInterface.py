@@ -1,5 +1,6 @@
 import interface
 
+
 class DriverInterface(interface.Interface):
 
 	@staticmethod
@@ -7,7 +8,7 @@ class DriverInterface(interface.Interface):
 		pass
 
 	@staticmethod
-	def query(sql,return_val=False):
+	def query(sql, return_val=False):
 		pass
 
 	@staticmethod
@@ -36,6 +37,10 @@ class DriverInterface(interface.Interface):
 
 	@staticmethod
 	def createColumns(tablename, new_columns):
+		pass
+
+	@staticmethod
+	def createColumnsForFind(tablename, where):
 		pass
 
 	@staticmethod
