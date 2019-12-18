@@ -42,6 +42,8 @@ class MySQLDriver(implements(DriverInterface)):
 
     @staticmethod
     def getAll(tablename):
+        MySQLDriver.createColumnsForFind(tablename, 'id = :id')
+
         rows, _ = MySQLDriver.query(
             MySQLQueryBuilder.getAllRecords(tablename), True)
         return AlphaRecord.create(tablename, rows)
