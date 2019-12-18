@@ -20,7 +20,7 @@ class MySQLGenerator (implements(GeneratorInterface)):
                     elif col['Type'].startswith(MySQLQueryBuilder.DATA_TYPE['int']) and (get_type(getattr(alpha_record,col['Field'])) != 'bool'):
                         updated_columns[col['Field']] = MySQLQueryBuilder.DATA_TYPE[get_type(getattr(alpha_record,col['Field']))]
                     elif col['Type'].startswith(MySQLQueryBuilder.DATA_TYPE['bool']) & (get_type(getattr(alpha_record,col['Field'])) != 'bool'):
-                        if get_type(getattr(alpha_record,col['Field'])) not in ['int', 'float'] :
+                        if get_type(getattr(alpha_record,col['Field'])) in ['int', 'float'] :
                             updated_columns[col['Field']] = MySQLQueryBuilder.DATA_TYPE[get_type(getattr(alpha_record,col['Field']))]
                         else:
                             updated_columns[col['Field']] = MySQLQueryBuilder.DATA_TYPE['str']
