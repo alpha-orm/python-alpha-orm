@@ -21,9 +21,7 @@ def getTableMap(tablename):
 	g = []
 	for element in DriverInterface.getDriver(AlphaORM.DRIVER).getColumns(tablename):
 		g.append({ element['Field'] : element['Type'] })
-	j = []
+	j = {}
 	for pair in g:
 		for key, val in pair.items():
-			pass
-			j.append({ key : val })
 	return j

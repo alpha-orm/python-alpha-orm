@@ -1,5 +1,6 @@
 from .utilities.constants import *
 from .utilities.functions import *
+from .query_builders.QueryBuilderInterface import QueryBuilderInterface
 
 
 class AlphaRecord():
@@ -28,14 +29,14 @@ class AlphaRecord():
             record = AlphaRecord(tablename, row['id'])
             del row['id']
             for column in list(row.keys()):
+                from .AlphaORM import AlphaORM
                 if column.endswith('_id'):
                     table = column.replace('_id', '')
-                    from .AlphaORM import AlphaORM
                     setattr(record, table, AlphaRecord.handleEmbedding(
                         AlphaORM.DRIVER, table, row[column]))
                     continue
-                data = dict_map[column].startswith(QueryBuilder.getQueryBuilder(
-                    AlphaORM.DRIVER).DATA_TYPE['bool']) if (row[column] == 1) else row[column]
+                data =  (row[column] == 1)  if dict_map[column].startswith(QueryBuilderInterface.getQueryBuilder(
+                    AlphaORM.DRIVER).DATA_TYPE['bool']) else row[column]
                 setattr(record, column, data)
             records.append(record)
         return records[0] if single else records
