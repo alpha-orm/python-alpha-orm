@@ -24,4 +24,5 @@ def getTableMap(tablename):
 	j = {}
 	for pair in g:
 		for key, val in pair.items():
+			j[key] = val
 	return j
