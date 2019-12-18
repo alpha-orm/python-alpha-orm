@@ -34,8 +34,8 @@ class AlphaORM():
 			    if col == '_tablename' or col == '_id':
 			    	continue
 			    
-			    if '_' in col :
-			    	raise RuntimeError(UNDERSCORE_NOT_SUPPORTED_ERROR)
+			    # if '_' in col :
+			    # 	raise RuntimeError(UNDERSCORE_NOT_SUPPORTED_ERROR)
 			    
 			    if ' ' in col:
 			    	raise RuntimeError(SPACE_NOT_SUPPORTED_ERROR)
