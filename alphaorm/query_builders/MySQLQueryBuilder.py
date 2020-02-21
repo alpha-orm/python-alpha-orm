@@ -55,10 +55,9 @@ class MySQLQueryBuilder(implements(QueryBuilderInterface)):
 			val = 1 if val is True else 0 if isinstance(val, bool) else val
 			val = json.dumps(val)
 			where = where.replace(match, val)
-
-			sql += where
-			sql += ' LIMIT 1' if single else ''
-			return sql
+		sql += where
+		sql += ' LIMIT 1' if single else ''
+		return sql
 
 	@staticmethod
 	def updateRecord(tablename, dict_map, id):
