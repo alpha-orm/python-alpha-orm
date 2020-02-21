@@ -42,7 +42,7 @@ class MySQLDriver(implements(DriverInterface)):
 
     @staticmethod
     def getAll(tablename):
-        MySQLDriver.createColumnsForFind(tablename, 'id = :id')
+        MySQLDriver.createTable(tablename)
 
         rows, _ = MySQLDriver.query(
             MySQLQueryBuilder.getAllRecords(tablename), True)
@@ -54,6 +54,8 @@ class MySQLDriver(implements(DriverInterface)):
 
     @staticmethod
     def updateRecord(alpha_record):
+        if not getProperties(alpha_record):
+            return alpha_record
         for col in getProperties(alpha_record):
             if isinstance(getattr(alpha_record, col), AlphaRecord):
                 setattr(alpha_record, col, MySQLDriver.updateRecord(
@@ -138,6 +140,8 @@ class MySQLDriver(implements(DriverInterface)):
                             getattr(alpha_record, col)))
                     return MySQLDriver.updateRecord(alpha_record)
 
+            if not getProperties(alpha_record):
+                return alpha_record
             retval, last = MySQLDriver.insertRecord(
                 alpha_record.getTableName(), alpha_record)
             alpha_record.setID(last)
