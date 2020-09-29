@@ -1,4 +1,6 @@
 import interface
+
+
 class GeneratorInterface (interface.Interface):
 
     @staticmethod
@@ -10,7 +12,7 @@ class GeneratorInterface (interface.Interface):
         pass
 
     @staticmethod
-    def columns(columns_db, alpha_record, base = True):
+    def columns(columns_db, alpha_record, base=True):
         pass
 
     @staticmethod

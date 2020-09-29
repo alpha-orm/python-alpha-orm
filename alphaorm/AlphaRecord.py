@@ -35,7 +35,7 @@ class AlphaRecord():
                     setattr(record, table, AlphaRecord.handleEmbedding(
                         AlphaORM.DRIVER, table, row[column]))
                     continue
-                data =  (row[column] == 1)  if dict_map[column].startswith(QueryBuilderInterface.getQueryBuilder(
+                data = (row[column] == 1) if dict_map[column].startswith(QueryBuilderInterface.getQueryBuilder(
                     AlphaORM.DRIVER).DATA_TYPE['bool']) else row[column]
                 setattr(record, column, data)
             records.append(record)

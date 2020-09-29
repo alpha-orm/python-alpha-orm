@@ -42,19 +42,19 @@ class DriverInterface(interface.Interface):
 
     @staticmethod
     def createColumnsForFind(tablename, where):
-	    alpha_record = AlphaORM.create(tablename)
-	    columns = re.findall(r'(\w+\s*)(=|!=|>|<|>=|<=)', where)
-	    for column in columns:
-	        setattr(alpha_record, column[0].strip(), False)
+        alpha_record = AlphaORM.create(tablename)
+        columns = re.findall(r'(\w+\s*)(=|!=|>|<|>=|<=)', where)
+        for column in columns:
+            setattr(alpha_record, column[0].strip(), False)
 
-	    columns_db = DriverInterface.getDriver(
-	        AlphaORM.DRIVER).getColumns(tablename)
-	    _, new_columns = GeneratorInterface.getGenerator(AlphaORM.DRIVER).columns(
-	        columns_db, alpha_record)
+        columns_db = DriverInterface.getDriver(
+            AlphaORM.DRIVER).getColumns(tablename)
+        _, new_columns = GeneratorInterface.getGenerator(AlphaORM.DRIVER).columns(
+            columns_db, alpha_record)
 
-	    if new_columns:
-	        DriverInterface.getDriver(AlphaORM.DRIVER).createColumns(
-	            tablename, new_columns)
+        if new_columns:
+            DriverInterface.getDriver(AlphaORM.DRIVER).createColumns(
+                tablename, new_columns)
 
     @staticmethod
     def find(tablename, where, dict_map):
