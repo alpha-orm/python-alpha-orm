@@ -1,5 +1,6 @@
 import interface
 
+
 class QueryBuilderInterface(interface.Interface):
 
     @staticmethod
@@ -35,14 +36,12 @@ class QueryBuilderInterface(interface.Interface):
         pass
 
     @staticmethod
-    def find(single, tablename, where, dict_map = []):
+    def find(single, tablename, where, dict_map=[]):
         pass
 
     @staticmethod
     def getQueryBuilder(driver):
         driver = driver.lower()
-        if driver ==  'mysql':
+        if driver == 'mysql':
             from .MySQLQueryBuilder import MySQLQueryBuilder
             return MySQLQueryBuilder
-        
-    
